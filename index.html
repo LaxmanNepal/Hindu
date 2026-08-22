@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="ne">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#8b2f0b">
+  <meta name="description" content="हिन्दू — नेपाली भाषामा वेद, उपनिषद्, गीता, पुराण, मन्त्र, श्लोक, कथा र तिथि।">
+  <title>हिन्दू — सनातन ज्ञान</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="./"><span class="om">ॐ</span><span>हिन्दू</span></a>
+    <button class="icon-btn" id="searchToggle" aria-label="खोज्नुहोस्">⌕</button>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero-glow"></div>
+      <p class="eyebrow">🪔 सनातन ज्ञानको डिजिटल पुस्तकालय</p>
+      <h1>ज्ञान खोज्नुहोस्,<br><em>आत्मासँग जोडिनुहोस्।</em></h1>
+      <p class="hero-copy">वेददेखि पुराणसम्म, मन्त्रदेखि महाभारतसम्म — नेपाली भाषामा एकै ठाउँमा।</p>
+      <div class="search-box" id="searchBox">
+        <span>⌕</span><input id="searchInput" placeholder="मन्त्र, श्लोक, देवता, कथा खोज्नुहोस्…" autocomplete="off"><kbd>↵</kbd>
+      </div>
+    </section>
+
+    <section class="quick-grid" aria-label="छिटो पहुँच">
+      <a href="#scriptures" class="quick-card"><b>📜</b><span>वेद</span><small>श्रुति ज्ञान</small></a>
+      <a href="#gita" class="quick-card"><b>🪷</b><span>गीता</span><small>७०० श्लोक</small></a>
+      <a href="#stories" class="quick-card"><b>⚔️</b><span>इतिहास</span><small>रामायण · महाभारत</small></a>
+      <a href="#mantra" class="quick-card"><b>📿</b><span>मन्त्र</span><small>दैनिक साधना</small></a>
+    </section>
+
+    <section class="section" id="today">
+      <div class="section-head"><div><span class="eyebrow">आजको आध्यात्मिक झलक</span><h2>आज के पढ्ने?</h2></div><button class="ghost-btn" id="shuffleBtn">⤨ फेरि</button></div>
+      <article class="quote-card" id="quoteCard">
+        <span class="quote-mark">“</span><p id="quoteText">ज्ञानको दीप प्रज्वलित हुँदैछ…</p><footer id="quoteSource">स्रोत तयार हुँदैछ</footer>
+      </article>
+    </section>
+
+    <section class="section" id="tithi">
+      <div class="section-head"><div><span class="eyebrow">पञ्चाङ्ग</span><h2>तिथि र पर्व</h2></div></div>
+      <div class="tithi-card"><div><small>आजको जानकारी</small><strong id="dateNepali">लोड हुँदैछ…</strong><span id="festivalText">पर्व तथा तिथि सामग्री अद्यावधिक हुँदैछ।</span></div><div class="sun">☀️</div></div>
+    </section>
+
+    <section class="section" id="scriptures">
+      <div class="section-head"><div><span class="eyebrow">ज्ञानको आधार</span><h2>शास्त्र संग्रह</h2></div><a href="pages/scriptures.html" class="text-link">सबै हेर्नुहोस् →</a></div>
+      <div class="horizontal" id="scriptureList"></div>
+    </section>
+
+    <section class="section" id="stories">
+      <div class="section-head"><div><span class="eyebrow">कथा र इतिहास</span><h2>आजको कथा</h2></div><a href="pages/stories.html" class="text-link">सबै कथा →</a></div>
+      <div class="story-grid" id="storyList"></div>
+    </section>
+
+    <section class="section" id="mantra">
+      <div class="section-head"><div><span class="eyebrow">जप र साधना</span><h2>लोकप्रिय मन्त्र</h2></div><a href="pages/mantras.html" class="text-link">मन्त्र संग्रह →</a></div>
+      <div class="mantra-list" id="mantraList"></div>
+    </section>
+  </main>
+
+  <nav class="bottom-nav">
+    <a class="active" href="./">⌂<span>गृह</span></a><a href="pages/scriptures.html">📖<span>शास्त्र</span></a><a href="pages/mantras.html">📿<span>मन्त्र</span></a><a href="pages/stories.html">🪔<span>कथा</span></a><a href="#searchInput" id="navSearch">⌕<span>खोज</span></a>
+  </nav>
+  <script src="assets/js/app.js"></script>
+</body>
+</html>

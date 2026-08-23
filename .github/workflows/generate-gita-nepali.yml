@@ -23,9 +23,10 @@ jobs:
       - name: Sync source Gita if missing
         run: |
           if [ ! -f data/texts/bhagavad-gita.json ]; then python scripts/sync-scriptures.py; fi
-      - name: Generate Nepali corpus
+      - name: Generate Nepali corpus (resumable with backoff)
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GITA_BATCH: '8'
         run: python scripts/generate-gita-nepali.py
       - name: Commit local Nepali corpus
         run: |

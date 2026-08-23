@@ -1,0 +1,36 @@
+name: Generate Complete Nepali Gita
+on:
+  workflow_dispatch:
+    inputs:
+      force:
+        description: 'Regenerate all Nepali meanings'
+        required: false
+        default: 'false'
+  workflow_run:
+    workflows: ['Sync Hindu Scriptures']
+    types: [completed]
+jobs:
+  generate:
+    if: github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+      - name: Sync source Gita if missing
+        run: |
+          if [ ! -f data/texts/bhagavad-gita.json ]; then python scripts/sync-scriptures.py; fi
+      - name: Generate Nepali corpus
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: python scripts/generate-gita-nepali.py
+      - name: Commit local Nepali corpus
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add data/texts/bhagavad-gita-nepali.json
+          git diff --cached --quiet || git commit -m 'content: add complete Nepali Bhagavad Gita'
+          git push

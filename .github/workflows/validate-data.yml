@@ -1,0 +1,45 @@
+name: Validate Hindu Data
+on:
+  push:
+    paths: ['data/**','scripts/**']
+  workflow_dispatch:
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+      - name: Validate JSON
+        run: |
+          python - <<'PY'
+          import json, pathlib, sys
+          errors=[]
+          for p in pathlib.Path('data').rglob('*.json'):
+              try: json.loads(p.read_text(encoding='utf-8'))
+              except Exception as e: errors.append(f'{p}: {e}')
+          if errors:
+              print('\n'.join(errors)); sys.exit(1)
+          print('All JSON files are valid.')
+          PY
+      - name: Check duplicate IDs
+        run: |
+          python - <<'PY'
+          import json, pathlib, sys
+          seen={}; errors=[]
+          def walk(x,p):
+              if isinstance(x,dict):
+                  if isinstance(x.get('id'),str):
+                      old=seen.get(x['id'])
+                      if old and old!=str(p): errors.append(f"duplicate id {x['id']}: {old} and {p}")
+                      seen[x['id']]=str(p)
+                  for v in x.values(): walk(v,p)
+              elif isinstance(x,list):
+                  for v in x: walk(v,p)
+          for p in pathlib.Path('data').rglob('*.json'):
+              try: walk(json.loads(p.read_text(encoding='utf-8')),p)
+              except: pass
+          if errors: print('\n'.join(errors)); sys.exit(1)
+          print(f'Checked {len(seen)} entity IDs.')
+          PY

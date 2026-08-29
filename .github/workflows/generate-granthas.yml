@@ -6,6 +6,7 @@ on:
     paths:
       - 'scripts/generate_grantha_dataset.py'
       - 'scripts/complete_grantha_dataset.py'
+      - 'scripts/finalize_grantha_dataset.py'
       - '.github/workflows/generate-granthas.yml'
   workflow_dispatch:
 
@@ -23,7 +24,7 @@ jobs:
         with:
           python-version: '3.12'
       - name: Generate JSON and CSV
-        run: python scripts/complete_grantha_dataset.py
+        run: python scripts/finalize_grantha_dataset.py
       - name: Validate dataset
         run: |
           python - <<'PY'

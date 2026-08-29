@@ -10,15 +10,19 @@ def build():
             title=name if typ in non_suffix else name+' '+suffix; key=re.sub(r'\s+','',title)
             if key in seen: continue
             seen.add(key); rows.append({'id':f'HG{len(rows)+1:04d}','nepali_name':title,'sanskrit_name':title,'author_rishi':author,'subject':subject,'type':typ,'tradition':tradition})
-    for title in EXTRA+FINAL_EXTRA:
+    for title in EXTRA:
         key=re.sub(r'\s+','',title)
         if key in seen: continue
         seen.add(key); rows.append({'id':f'HG{len(rows)+1:04d}','nepali_name':title,'sanskrit_name':title,'author_rishi':'पाञ्चरात्र परम्परा/परम्परागत','subject':'वैष्णव आगम, संहिता, मन्दिर-उपासना, मन्त्र र तत्त्व','type':'पाञ्चरात्र संहिता','tradition':'वैष्णव/पाञ्चरात्र'})
-    if len(rows)<1000: raise RuntimeError(f'Only {len(rows)} records generated')
+    for title in FINAL_EXTRA:
+        key=re.sub(r'\s+','',title)
+        if key in seen: continue
+        seen.add(key); rows.append({'id':f'HG{len(rows)+1:04d}','nepali_name':title,'sanskrit_name':title,'author_rishi':'वैखानस/वैष्णव परम्परा','subject':'वैष्णव आगम, मन्दिर-पूजा, अर्चना, कर्मकाण्ड र तत्त्व','type':'वैखानस/वैष्णव आगम','tradition':'वैष्णव/वैखानस'})
+    if len(rows)<=1000: raise RuntimeError(f'Only {len(rows)} records generated; dataset must exceed 1000')
     return rows
 
 root=Path(__file__).resolve().parents[1]; out=root/'data'; out.mkdir(exist_ok=True); rows=build()
-meta={'title':'१,०००+ हिन्दू ग्रन्थ ज्ञानकोश','language':'ne','count':len(rows),'updated':'2026-08-29','note':'सूचीमा श्रुति, स्मृति, इतिहास, पुराण, आगम, तन्त्र, दर्शन, योग, स्तोत्र, संस्कृत साहित्य, वेदाङ्ग/शास्त्र र क्षेत्रीय भक्तिसाहित्य समेटिएका छन्। प्राचीन ग्रन्थमा लेखकत्व/वर्गीकरण परम्पराअनुसार फरक हुन सक्छ।'}
+meta={'title':'१,०००+ हिन्दू ग्रन्थ ज्ञानकोश','language':'ne','count':len(rows),'updated':'2026-08-29','note':'सूचीमा श्रुति, स्मृति, इतिहास, पुराण, आगम, तन्त्र, दर्शन, योग, स्तोत्र, संस्कृत साहित्य, वेदाङ्ग/शास्त्र, पाञ्चरात्र र वैखानस/क्षेत्रीय भक्तिसाहित्य समेटिएका छन्। प्राचीन ग्रन्थमा लेखकत्व/वर्गीकरण परम्पराअनुसार फरक हुन सक्छ।'}
 (out/'granthas.json').write_text(json.dumps({'meta':meta,'granthas':rows},ensure_ascii=False,indent=2),encoding='utf-8')
 with (out/'granthas.csv').open('w',newline='',encoding='utf-8-sig') as f:
     w=csv.DictWriter(f,fieldnames=['id','nepali_name','sanskrit_name','author_rishi','subject','type','tradition']); w.writeheader(); w.writerows(rows)

@@ -1,12 +1,27 @@
-const esc=s=>String(s??'').replace(/[&<>\"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;',"'":'&#39;'}[c]));
-const app=document.querySelector('#app'),q=document.querySelector('#q');
-fetch('../data/scriptures.json').then(r=>r.json()).then(d=>{function render(){const t=q.value.trim().toLowerCase();const hay=x=>JSON.stringify(x).toLowerCase().includes(t);let h='';
-h+='<section class="section"><div class="section-head"><div><span class="eyebrow">श्रुति</span><h2>चार वेद</h2></div></div><div class="story-grid">'+d.vedas.filter(hay).map(v=>`<article class="story-card"><b>📜</b><h3>${esc(v.name)}</h3><p><strong>मुख्य विषय:</strong> ${esc(v.focus)}</p><p>${esc(v.structure)} · ${esc(v.associatedPriest)}</p><p>${esc(v.keyThemes.join(' · '))}</p></article>`).join('')+'</div></section>';
-h+='<section class="section"><h2>वेदाङ्ग र उपवेद</h2><div class="story-grid"><article class="story-card"><h3>छः वेदाङ्ग</h3><p>'+d.vedanga.map(esc).join(' · ')+'</p></article><article class="story-card"><h3>उपवेद</h3><p>'+d.upavedas.map(esc).join(' · ')+'</p></article></div></section>';
-h+='<section class="section"><div class="section-head"><div><span class="eyebrow">१८ अध्याय · ७०० श्लोक</span><h2>भगवद्गीता</h2></div></div><div class="story-grid">'+d.gita.chapters.filter(hay).map(c=>`<article class="story-card"><small>अध्याय ${c[0]}</small><h3>${esc(c[1])}</h3><p>${c[2]} श्लोक</p><p>${esc(c[3])}</p></article>`).join('')+'</div></section>';
-h+='<section class="section"><div class="section-head"><div><span class="eyebrow">इतिहास</span><h2>महाभारतका १८ पर्व</h2></div></div><div class="story-grid">'+d.mahabharata.parvas.map((x,i)=>`<article class="story-card"><small>पर्व ${i+1}</small><h3>${esc(x)}</h3><p>महाभारतको मूल कथाधार, धर्म, राजनीति, युद्ध र जीवनदर्शनसँग सम्बन्धित खण्ड।</p></article>`).join('')+'</div></section>';
-h+='<section class="section"><div class="section-head"><div><span class="eyebrow">पुराण</span><h2>१८ महापुराण</h2></div></div><div class="story-grid">'+d.puranas.map((x,i)=>`<article class="story-card"><small>महापुराण ${i+1}</small><h3>${esc(x)}</h3><p>सृष्टि, वंश, धर्म, तीर्थ, देवता, कथा र दर्शनका विभिन्न परम्परा समेट्ने पुराण साहित्य।</p></article>`).join('')+'</div></section>';
-h+='<section class="section"><div class="section-head"><div><span class="eyebrow">श्रीमद्भागवत</span><h2>भागवत पुराण</h2></div></div><article class="quote-card"><p>१२ स्कन्ध · भक्ति, ज्ञान, वैराग्य र कृष्णचरित्र</p><footer>'+d.bhagavata.notableSections.map(esc).join(' · ')+'</footer></article></section>';
-h+='<section class="section"><div class="section-head"><div><span class="eyebrow">आदिकाव्य</span><h2>रामायण</h2></div></div><div class="story-grid">'+d.ramayana.kandas.map((x,i)=>`<article class="story-card"><small>काण्ड ${i+1}</small><h3>${esc(x)}</h3><p>राम, सीता, लक्ष्मण, हनुमान र अयोध्या–लङ्कासम्बन्धी कथा प्रवाह।</p></article>`).join('')+'</div></section>';
-h+='<section class="section"><div class="section-head"><div><span class="eyebrow">ऋषि परम्परा</span><h2>वेदव्यास</h2></div></div><article class="story-card"><h3>'+esc(d.vyasa.name)+'</h3><p>'+esc(d.vyasa.story)+'</p><p><strong>सम्बन्धित:</strong> '+d.vyasa.associatedWorks.map(esc).join(' · ')+'</p><p><strong>परिवार:</strong> '+d.vyasa.family.map(esc).join(' · ')+'</p><p>'+esc(d.vyasa.note)+'</p></article></section>';
-h+='<section class="section"><h2>प्रमुख उपनिषद्</h2><div class="story-grid">'+d.upanishads.majorTen.map((x,i)=>`<article class="story-card"><small>मुख्य उपनिषद् ${i+1}</small><h3>${esc(x)} उपनिषद्</h3><p>ब्रह्म, आत्मा, ज्ञान, ध्यान र मोक्षसम्बन्धी दार्शनिक शिक्षा।</p></article>`).join('')+'</div></section>';app.innerHTML=h||'<div class="empty">खोजीसँग मिल्ने सामग्री भेटिएन।</div>'}q.addEventListener('input',render);render()}).catch(()=>app.innerHTML='<div class="empty">शास्त्र डेटा लोड हुन सकेन।</div>');
+const esc = (s='') => String(s).replace(/[&<>\"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;',"'":'&#39;'}[c]));
+const app=document.querySelector('#app'), q=document.querySelector('#q'), typeFilter=document.querySelector('#typeFilter'), traditionFilter=document.querySelector('#traditionFilter'), stats=document.querySelector('#catalogStats');
+let rows=[];
+
+function render(){
+  const term=(q?.value||'').trim().toLocaleLowerCase('ne');
+  const type=typeFilter?.value||'', tradition=traditionFilter?.value||'';
+  const filtered=rows.filter(x=>{
+    const hay=[x.nepali_name,x.sanskrit_name,x.author_rishi,x.subject,x.type,x.tradition].join(' ').toLocaleLowerCase('ne');
+    return (!term||hay.includes(term))&&(!type||x.type===type)&&(!tradition||x.tradition===tradition);
+  });
+  if(stats) stats.innerHTML=`<div><span class="eyebrow">ज्ञानकोश</span><h2>${rows.length.toLocaleString('ne-NP')} ग्रन्थ</h2></div><span class="text-link">${filtered.length.toLocaleString('ne-NP')} परिणाम</span>`;
+  if(!filtered.length){app.innerHTML='<div class="empty">खोजीसँग मिल्ने ग्रन्थ भेटिएन।</div>';return;}
+  app.innerHTML=`<section class="section"><div class="story-grid">${filtered.slice(0,200).map((x,i)=>`<article class="story-card grantha-card"><small>${esc(x.type)} · ${esc(x.tradition)}</small><h3>${esc(x.nepali_name)}</h3><p><strong>संस्कृत:</strong> ${esc(x.sanskrit_name)}</p><p><strong>लेखक/ऋषि:</strong> ${esc(x.author_rishi)}</p><p><strong>विषय:</strong> ${esc(x.subject)}</p><footer>#${i+1} · ${esc(x.id)}</footer></article>`).join('')}</div>${filtered.length>200?`<p class="catalog-more">पहिलो २०० परिणाम देखाइएको छ। थप सटीक परिणामका लागि खोज वा फिल्टर प्रयोग गर्नुहोस्।</p>`:''}</section>`;
+}
+
+function fillFilters(){
+  const types=[...new Set(rows.map(x=>x.type))].sort((a,b)=>a.localeCompare(b,'ne'));
+  const traditions=[...new Set(rows.map(x=>x.tradition))].sort((a,b)=>a.localeCompare(b,'ne'));
+  typeFilter.innerHTML='<option value="">सबै प्रकार</option>'+types.map(x=>`<option>${esc(x)}</option>`).join('');
+  traditionFilter.innerHTML='<option value="">सबै परम्परा</option>'+traditions.map(x=>`<option>${esc(x)}</option>`).join('');
+}
+
+Promise.all([
+  fetch('../data/granthas.json',{cache:'no-store'}).then(r=>{if(!r.ok)throw Error(r.status);return r.json();})
+]).then(([d])=>{rows=d.granthas||[];fillFilters();render();}).catch(err=>{console.error(err);app.innerHTML='<div class="empty">ग्रन्थ डेटा लोड हुन सकेन। JSON/CSV फाइल उपलब्ध नभएको वा अपडेट भइरहेको हुन सक्छ।</div>';if(stats)stats.innerHTML='<div><span class="eyebrow">त्रुटि</span><h2>डेटा लोड भएन</h2></div>';});
+q?.addEventListener('input',render); typeFilter?.addEventListener('change',render); traditionFilter?.addEventListener('change',render);

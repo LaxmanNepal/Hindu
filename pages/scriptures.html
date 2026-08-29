@@ -1,1 +1,29 @@
-<!doctype html><html lang="ne"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="वेद, भगवद्गीता, महाभारत, रामायण, पुराण, उपनिषद् र वेदव्यास सम्बन्धी नेपाली ज्ञानकोश"><title>शास्त्र ज्ञानकोश — हिन्दू</title><link rel="stylesheet" href="../assets/css/style.css"></head><body><main class="section scripture-page"><div class="deity-hero"><span class="eyebrow">📜 श्रुति · स्मृति · इतिहास · पुराण</span><h1>शास्त्र ज्ञानकोश</h1><p>चार वेद, वेदाङ्ग, उपनिषद्, भगवद्गीता, महाभारत, रामायण, १८ महापुराण र वेदव्यास सम्बन्धी संरचित ज्ञान।</p><div class="deity-search"><span>⌕</span><input id="q" placeholder="वेद, अध्याय, पर्व, पुराण वा विषय खोज्नुहोस्…"></div></div><div id="app"></div></main><script src="../assets/js/nav.js"></script><script src="../assets/js/scriptures.js"></script></body></html>
+<!doctype html>
+<html lang="ne">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="१,०००+ हिन्दू ग्रन्थहरूको नेपाली नाम, संस्कृत नाम, लेखक/ऋषि, विषय र ग्रन्थ प्रकारसहितको संरचित ज्ञानकोश।">
+<title>१,०००+ हिन्दू ग्रन्थ ज्ञानकोश — हिन्दू</title>
+<link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body>
+<main class="section scripture-page">
+  <div class="deity-hero">
+    <span class="eyebrow">📚 श्रुति · स्मृति · इतिहास · पुराण · आगम · दर्शन</span>
+    <h1>१,०००+ हिन्दू ग्रन्थ ज्ञानकोश</h1>
+    <p>नेपाली नाम, संस्कृत नाम, लेखक/ऋषि, विषय र ग्रन्थ प्रकारसहित व्यवस्थित डिजिटल सूची। प्राचीन ग्रन्थमा लेखकत्व तथा वर्गीकरण परम्पराअनुसार फरक हुन सक्छ।</p>
+    <div class="deity-search"><span>⌕</span><input id="q" placeholder="ग्रन्थ, ऋषि, विषय वा प्रकार खोज्नुहोस्…" autocomplete="off"></div>
+    <div class="catalog-actions">
+      <select id="typeFilter" aria-label="ग्रन्थ प्रकार"><option value="">सबै प्रकार</option></select>
+      <select id="traditionFilter" aria-label="परम्परा"><option value="">सबै परम्परा</option></select>
+      <a class="ghost-btn" href="../data/granthas.json" download>JSON</a>
+      <a class="ghost-btn" href="../data/granthas.csv" download>CSV</a>
+    </div>
+  </div>
+  <div id="catalogStats" class="section-head"><div><span class="eyebrow">ज्ञानकोश</span><h2>लोड हुँदैछ…</h2></div></div>
+  <div id="app"></div>
+</main>
+<script src="../assets/js/nav.js"></script>
+<script src="../assets/js/scriptures.js"></script>
+</body>
+</html>

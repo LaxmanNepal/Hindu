@@ -1,9 +1,7 @@
 import csv, json, re
 from pathlib import Path
 from generate_grantha_dataset import GROUPS
-from complete_grantha_dataset import EXTRA
-
-FINAL_EXTRA='''पाञ्चरात्ररत्न-संहिता पाञ्चरात्रसार-संहिता नारायणतत्त्व-संहिता'''.split()
+from grantha_extras import EXTRA, FINAL_EXTRA
 
 def build():
     rows=[]; seen=set(); non_suffix={'धर्मशास्त्र/धर्मसूत्र','दर्शनग्रन्थ','योगग्रन्थ','तन्त्र','स्तोत्र/कवच','काव्य/नाट्यग्रन्थ','शास्त्र/वेदाङ्ग','क्षेत्रीय भक्तिग्रन्थ','भक्तिदर्शन/ग्रन्थ'}

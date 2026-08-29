@@ -7,6 +7,7 @@ on:
       - 'scripts/generate_grantha_dataset.py'
       - 'scripts/complete_grantha_dataset.py'
       - 'scripts/finalize_grantha_dataset.py'
+      - 'scripts/grantha_extras.py'
       - '.github/workflows/generate-granthas.yml'
   workflow_dispatch:
 

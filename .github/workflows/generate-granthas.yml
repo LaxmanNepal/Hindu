@@ -1,0 +1,43 @@
+name: Generate Hindu Grantha Dataset
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/generate_grantha_dataset.py'
+      - '.github/workflows/generate-granthas.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Generate JSON and CSV
+        run: python scripts/generate_grantha_dataset.py
+      - name: Validate dataset
+        run: |
+          python - <<'PY'
+          import json
+          d=json.load(open('data/granthas.json',encoding='utf-8'))
+          assert len(d['granthas']) >= 1000, len(d['granthas'])
+          required={'nepali_name','sanskrit_name','author_rishi','subject','type'}
+          assert all(required <= set(x) for x in d['granthas'])
+          print('Validated', len(d['granthas']), 'records')
+          PY
+      - name: Commit generated dataset
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add data/granthas.json data/granthas.csv
+          git diff --cached --quiet && exit 0
+          git commit -m 'Generate 1000+ Hindu grantha JSON and CSV dataset'
+          git push
